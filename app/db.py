@@ -27,7 +27,7 @@ mysql_url = f"mysql+pymysql://{mysql_user}:{mysql_password}@{mysql_host}:{mysql_
 engine = create_engine(mysql_url)
 
 # 테이블 이름
-TABLE_NAME = os.getenv('MYSQL_TABLE_NAME', 'sensor') # 테이블 이름
+TABLE_NAME = os.getenv('MYSQL_TABLE_NAME') # 테이블 이름
 
 # ============================================
 # 데이터베이스 쿼리 함수

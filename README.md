@@ -40,7 +40,7 @@ pip freeze > requirements.txt
 # MQTT 설정
 MQTT_BROKER_IP=localhost
 MQTT_BROKER_PORT=1883
-MQTT_CLIENT_ID=iot_backend_client
+MQTT_CLIENT_ID=iot_backend_client #그대로 적용해도 문제없음.
 # oneM2M 토픽 형식: /oneM2M/req/${AE}/${CseId}/json
 MQTT_TOPIC=/oneM2M/req/+/+/json
 
@@ -48,12 +48,16 @@ MQTT_TOPIC=/oneM2M/req/+/+/json
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
 MYSQL_USER=root
-MYSQL_PASSWORD=your_password
-MYSQL_DATABASE=iot_db
+MYSQL_PASSWORD=change_your_mysql_db_password
+MYSQL_DATABASE=change_your_database_name
+MYSQL_TABLE_NAME=change_your_table_name
 
 # FastAPI 설정
 API_HOST=0.0.0.0
 API_PORT=8000
+
+# 포탈 url
+PORTAL_URL=http://localhost:5173
 ```
 
 ### 4. 프로젝트 실행
