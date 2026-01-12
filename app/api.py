@@ -14,7 +14,7 @@ load_dotenv()
 app = FastAPI(title="IoT Backend API", version="1.0.0")
 
 # CORS 설정
-portal_url = os.getenv('PORTAL_URL', 'http://localhost:5173')
+portal_url = os.getenv('PORTAL_URL')
 allow_origins = [url.strip() for url in portal_url.split(',')]
 
 app.add_middleware(
