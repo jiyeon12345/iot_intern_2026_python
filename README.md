@@ -26,7 +26,7 @@ deactivate
 
 ```bash
 # requirements.txt에 있는 모든 라이브러리 설치
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # 설치한 라이브러리 목록을 requirements.txt에 저장
 pip freeze > requirements.txt
