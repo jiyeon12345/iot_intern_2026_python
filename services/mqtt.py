@@ -3,10 +3,12 @@
 # ============================================
 import paho.mqtt.client as mqtt
 import os
+import requests  # <-- 추가: ThingsBoard API 호출용
 from dotenv import load_dotenv
 from datetime import datetime
 import json
 from app.db import save
+
 
 # ============================================
 # .env 파일에서 환경변수 읽기
@@ -21,6 +23,18 @@ MQTT_BROKER_PORT = int(os.getenv('MQTT_BROKER_PORT', 1883))
 CLIENT_ID = os.getenv('MQTT_CLIENT_ID', 'iot_backend_client')
 MQTT_TOPIC = os.getenv('MQTT_TOPIC', '/oneM2M/req/+/+/json')
 
+# ============================================
+# ThingsBoard 설정
+# ============================================
+TB_HOST = os.getenv('TB_HOST', 'localhost')  # 로컬 PC면 localhost
+# 센서별 Access Token 매핑 (센서이름: 토큰값)
+# ThingsBoard에서 장치를 만들고 받은 토큰들을 여기에 넣으세요.
+# 아래는 예시
+TB_TOKENS = {
+    "sensor01": "YOUR_TOKEN_1",
+    "sensor02": "YOUR_TOKEN_2",
+    "unknown": "YOUR_DEFAULT_TOKEN"
+}
 # ============================================
 # 데이터 가공
 # ============================================
@@ -51,6 +65,38 @@ def process_data(raw_data: str) -> dict:
     except Exception as e:
         print(f"데이터 파싱 실패: {e}")
         return None
+
+# ============================================
+# ThingsBoard 전송 함수 (추가)
+# ============================================
+def send_to_thingsboard(sensor_nm, data):
+    """
+    가공된 데이터를 ThingsBoard로 전송
+    """
+    token = TB_TOKENS.get(sensor_nm) # 이름에 맞는 토큰 가져오기
+    
+    if not token:
+        print(f"[{sensor_nm}]에 매칭되는 ThingsBoard 토큰이 없습니다. 전송 스킵.")
+        return
+
+    # 최신 버전 표준 텔레메트리 URL
+    url = f"http://{TB_HOST}:8080/api/v1/{token}/telemetry"
+    
+    # ThingsBoard는 딕셔너리 형태를 바로 받습니다.
+    # 예: {'temperature': 25.5, 'humidity': 60}
+    payload = {
+        "temperature": data.get('temperature'),
+        "humidity": data.get('humidity')
+    }
+
+    try:
+        response = requests.post(url, json=payload, timeout=3)
+        if response.status_code == 200:
+            print(f" ThingsBoard 전송 성공: [{sensor_nm}]")
+        else:
+            print(f" ThingsBoard 전송 실패 ({response.status_code}): [{sensor_nm}]")
+    except Exception as e:
+        print(f" ThingsBoard 연결 오류: {e}")
 
 # ============================================
 # MQTT 연결 성공 시 호출
@@ -88,6 +134,9 @@ def on_message(client, userdata, msg):
             temperature=processed_data['temperature'],
             humidity=processed_data['humidity']
         )
+
+        # 5. ThingsBoard 전송 (추가됨)
+        send_to_thingsboard(processed_data['sensor_nm'], processed_data)
         
     except Exception as e:
         print(f"메시지 처리 오류: {e}")
