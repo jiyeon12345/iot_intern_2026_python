@@ -53,6 +53,13 @@ docker-compose up -d
 
 ```
 
+<img width="1692" height="377" alt="image" src="https://github.com/user-attachments/assets/d9fb92e8-96b8-405d-9d39-e62eb440ddec" />
+이미지가 위와 같이 뜨면 문제가 없는겁니다.
+
+<img width="309" height="58" alt="image" src="https://github.com/user-attachments/assets/a5c48c73-274e-4075-a521-8d744a9e28f2" />
+<img width="1663" height="71" alt="image" src="https://github.com/user-attachments/assets/4b0d9860-7218-40ff-89d8-b90dce71fce1" />
+위와 같이 컨테이너에서 띵스보드가 running 상태여야 작업이 가능합니다.
+
 > **참고:** 처음 실행 시 이미지를 다운로드하고 데이터베이스를 초기화하는 데 시간이 몇 분 정도 걸립니다.
 
 ## 4. 접속 및 확인
