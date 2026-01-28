@@ -25,7 +25,7 @@ version: '3.0'
 services:
   mytb:
     restart: always
-    image: "thingsboard"
+    image: "thingsboard/tb-postgres"
     ports:
       - "8083:9090"
       - "1883:1883"
