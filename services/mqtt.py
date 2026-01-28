@@ -80,7 +80,7 @@ def send_to_thingsboard(sensor_nm, data):
         return
 
     # 최신 버전 표준 텔레메트리 URL
-    url = f"http://{TB_HOST}:8080/api/v1/{token}/telemetry"
+    url = f"http://{TB_HOST}:8083/api/v1/{token}/telemetry"
     
     # ThingsBoard는 딕셔너리 형태를 바로 받습니다.
     # 예: {'temperature': 25.5, 'humidity': 60}
